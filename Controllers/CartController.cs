@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MagyargombfociStore.Controllers
 {
 
+    [Authorize]
     [Authorize]
 
     public class CartController : Controller

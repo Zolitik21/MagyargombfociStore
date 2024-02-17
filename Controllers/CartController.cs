@@ -9,7 +9,7 @@ namespace MagyargombfociStore.Controllers
     public class CartController : Controller
     {
         private readonly ICartRepository _cartRepo;
-        
+
 
         public CartController(ICartRepository cartRepo)
         {

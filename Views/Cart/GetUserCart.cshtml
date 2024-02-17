@@ -1,0 +1,75 @@
+﻿@model ShoppingCart
+@{
+    ViewData["Title"] = "GetUserCart";
+}
+<div style="width:100%;margin:auto" class="mt-2">
+    @if (Model != null && Model.CartDetails != null && Model.CartDetails.Count > 0)
+    {
+        <h3>Kosár tartalma</h3>
+
+        <table class="table table-striped">
+            <tr>
+                <th>Kép</th>
+                <th>Termék neve</th>
+               
+                <th>Egységár</th>
+                <th>Mennyiség</th>
+                <th>Összesen</th>
+                
+            </tr>
+            @foreach (var item in Model.CartDetails)
+            {
+                <tr>
+                   
+                    <td>
+                        @if (string.IsNullOrEmpty(item.Product.Image))
+                        {
+                            <img src="/img/NoImage.jpg" style="width:100px;height:100px" />
+                        }
+                        else
+                        {
+                            <img src="/img/@item.Product.Image" style="width:100px;height:100px" />
+                        }
+                    </td>
+                    <td>@item.Product.ProductName</td>
+                   
+                    <td>@(item.Product.Price) <h9>Ft</h9></td>
+                  
+                    
+                    
+                    <td>
+                        <a class="btn btn-info" href="/cart/removeitem?buttonfootballId=@item.ProductId">-</a>
+                   <h9>@item.Quantity</h9>
+                        <a class="btn btn-info" href="/Cart/AddItem?buttonfootballId=@item.ProductId&&redirect=1">+</a>
+                    
+                    </td>
+                    <td>@(item.Product.Price * item.Quantity) <h9>Ft</h9></td>
+                </tr>
+            }
+        </table>
+
+        <div style="margin-left:700px;">
+        <div class="my-2">
+                <h4><b>
+                   
+                     
+                        @String.Format("Fizetendő: {0:N0} Ft", Model.CartDetails.Select(item => item.Product.Price * item.Quantity).Sum())
+                    </b>
+                </h4>
+        </div>
+
+        <div class="col-sm-4 col-md-12 ">
+            <a class="btn btn-primary" href="/Cart/Checkout">Tovább a pénztárhoz</a>
+            
+        </div>
+        </div>
+    }
+    else
+    {   <div style="text-align:center; padding-top:170px" >
+            <h2>A kosár üres!</h2>
+
+    </div>
+        
+    }
+</div>
+

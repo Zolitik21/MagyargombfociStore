@@ -1,0 +1,150 @@
+﻿@model ButtonFootballDisplayModel
+
+
+
+@{
+    ViewData["Title"] = "Főoldal - Magyargombfoci.hu";
+    
+}
+ <!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="~/css/Index.css" />
+    <link href="~/js/Currency.js" />
+
+</head>
+<body>
+
+</body>
+
+
+</html> 
+
+<div class="my-2">
+    
+        <form asp-action="Index" class="row row-cols-lg-auto g-3 align-items-center">
+  
+
+  <div class="col-12">
+    <label class="visually-hidden" for="categoryId">Categories</label>
+            <select class="form-select" id="categoryId" name="categoryId">
+      <option disabled selected hidden>Kiválaszt...</option>
+      @foreach (var category in Model.Categories)
+                {
+                    <option selected="@(category.Id==Model.CategoryId)" value="@category.Id">@category.CategoryName</option>
+                }
+    
+    </select>
+  </div>
+
+        <div class="col-12">
+            <label class="visually-hidden" for="sterm">Keresés...</label>
+            <div class="input-group">
+                <div class="input-group-text"></div>
+                <input type="text" class="form-control" value="@Model.STerm" id="sterm" name="sterm" placeholder="Keresés...">
+            </div>
+        </div>
+
+  
+
+  <div class="col-12">
+    <button type="submit" class="btn btn-primary">Keresés</button>
+    <a href="/Home/Index" class="btn btn-dark">Alaphelyzet</a>
+  </div>
+</form>
+
+
+
+
+    
+
+
+</div>
+
+
+
+
+    
+        <div class="row">
+     @foreach(var buttonfootball in Model.Products) 
+     {
+   
+            <div class="col-md-3 col-sm-12">
+                    <div class="card h-100" style="width:12rem;" >
+                    @if (string.IsNullOrEmpty(buttonfootball.Image))
+                    {
+                             <img style="width:190px; height:220px" src="/img/NoImage.jpg" class="card-img-top" alt="...">
+
+                    }
+                else
+                {
+                <img style="width:190px; height:220px" src="/img/@buttonfootball.Image " class="card-img-top" alt="...">
+                }
+    
+            <div class="card-body">
+                     <h5 class="card-title">@buttonfootball.ProductName</h5>
+                    
+                     <p class="card-text">
+                        <b>Minőség: </b>@buttonfootball.Quality
+                    </p>
+                     <p class="card-text">
+                      
+                    <b>Kategória: </b> @buttonfootball.CategoryName 
+                    
+                   
+
+                    </p>
+                  
+                 
+                        <h5 > <b>Ár: </b> @buttonfootball.Price.ToString("c")</h5>
+                        <div class="card-footer " style="height:50px">
+
+                    
+                    
+               
+
+                       
+
+
+                         <button type="button" onclick="add(@buttonfootball.Id)" class="btn btn-primary">KOSÁRBA</button>
+                    </div>
+             </div>
+             </div>
+
+     
+        
+    
+</div>
+}
+</div>
+
+@section Scripts{
+    <script>
+
+        async function add(buttonfootballId) {
+            var usernameEl = document.getElementById("username");
+            if (usernameEl == null) {
+                window.location.href = "/Identity/Account/Login";
+                //var username=usernameEl.innerText;
+                //  if(username.length<1){
+                //      window.location.href="/Identity/Account/Login";
+                //  }
+            }
+            try {
+                var response = await fetch(`/Cart/AddItem?buttonfootballId=${buttonfootballId}`);
+                if (response.status == 200) {
+                    var result = await response.json();
+                    var cartCountEl = document.getElementById("cartCount");
+                    cartCountEl.innerHTML = result;
+                    window.location.href = "#cartCount";
+                }
+            }
+            catch (err) {
+                console.log(err);
+            }
+        }
+
+
+   </script>
+    
+}
